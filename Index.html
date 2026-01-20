@@ -1,0 +1,379 @@
+import React, { useState } from 'react';
+import { 
+  Shield, 
+  Sword, 
+  Coins, 
+  Activity, 
+  Scale, 
+  Camera, 
+  Flame, 
+  Utensils, 
+  Users, 
+  Trophy, 
+  CheckSquare, 
+  Terminal,
+  Zap,
+  Info,
+  ChevronDown,
+  ChevronUp
+} from 'lucide-react';
+
+const Card = ({ children, className = "" }) => (
+  <div className={`bg-slate-900 border border-slate-700 rounded-lg p-6 shadow-lg relative overflow-hidden ${className}`}>
+    <div className="absolute top-0 left-0 w-2 h-2 border-t-2 border-l-2 border-emerald-500"></div>
+    <div className="absolute top-0 right-0 w-2 h-2 border-t-2 border-r-2 border-emerald-500"></div>
+    <div className="absolute bottom-0 left-0 w-2 h-2 border-b-2 border-l-2 border-emerald-500"></div>
+    <div className="absolute bottom-0 right-0 w-2 h-2 border-b-2 border-r-2 border-emerald-500"></div>
+    {children}
+  </div>
+);
+
+const SectionTitle = ({ icon: Icon, title, subtitle }) => (
+  <div className="mb-6 border-b border-slate-700 pb-2">
+    <div className="flex items-center gap-2 text-emerald-400 mb-1">
+      <Icon size={24} />
+      <h2 className="text-2xl font-bold font-mono uppercase tracking-wider">{title}</h2>
+    </div>
+    {subtitle && <p className="text-slate-400 text-sm font-mono">{subtitle}</p>}
+  </div>
+);
+
+const StatBadge = ({ value, label, color = "emerald" }) => (
+  <div className={`flex flex-col items-center p-3 bg-slate-800/50 rounded border border-${color}-500/30`}>
+    <span className={`text-2xl font-bold text-${color}-400`}>{value}</span>
+    <span className="text-xs text-slate-400 uppercase tracking-widest">{label}</span>
+  </div>
+);
+
+const ExerciseCard = ({ title, sub, icon: Icon, desc, epicModes }) => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <div className="bg-slate-800/40 border border-slate-700 rounded-lg p-4 mb-4 hover:border-emerald-500/50 transition-colors">
+      <div className="flex items-start gap-4">
+        <div className="p-3 bg-slate-900 rounded-full border border-slate-600">
+          <Icon className="text-emerald-400" size={24} />
+        </div>
+        <div className="flex-1">
+          <h3 className="text-lg font-bold text-white flex flex-col md:flex-row md:items-center gap-1">
+            {title}
+            <span className="text-xs font-mono text-emerald-500 bg-emerald-900/30 px-2 py-0.5 rounded w-fit">{sub}</span>
+          </h3>
+          <p className="text-slate-300 text-sm mt-2 leading-relaxed">{desc}</p>
+          
+          <button 
+            onClick={() => setIsOpen(!isOpen)}
+            className="mt-4 flex items-center gap-2 text-xs font-bold text-amber-400 hover:text-amber-300 transition-colors uppercase tracking-widest"
+          >
+            {isOpen ? <ChevronUp size={14}/> : <ChevronDown size={14}/>}
+            {isOpen ? "Ocultar Modos Épicos" : "Ver Modos Épicos (Reunión)"}
+          </button>
+
+          {isOpen && (
+            <div className="mt-3 p-3 bg-amber-900/20 border border-amber-500/30 rounded text-sm text-amber-100 animate-in fade-in slide-in-from-top-2 duration-300">
+              <ul className="space-y-2 list-disc list-inside">
+                {epicModes.map((mode, idx) => (
+                  <li key={idx}><span className="font-bold text-amber-400">{mode.title}:</span> {mode.desc}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default function GuildWarsLanding() {
+  const [checkedItems, setCheckedItems] = useState({
+    buyin: false,
+    vote: false,
+    dates: false,
+    paid: false
+  });
+
+  const toggleCheck = (key) => {
+    setCheckedItems(prev => ({ ...prev, [key]: !prev[key] }));
+  };
+
+  return (
+    <div className="min-h-screen bg-slate-950 text-slate-200 font-sans selection:bg-emerald-500/30 selection:text-emerald-200 pb-20">
+      
+      {/* HUD / StatusBar */}
+      <div className="sticky top-0 z-50 bg-slate-900/90 backdrop-blur border-b border-emerald-500/20 px-4 py-2 flex justify-between items-center text-xs font-mono uppercase tracking-widest">
+        <div className="flex items-center gap-2">
+          <span className="relative flex h-2 w-2">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+          </span>
+          <span className="text-emerald-400">Server Online</span>
+        </div>
+        <div className="text-slate-500">Ping: 24ms</div>
+      </div>
+
+      {/* Hero Section */}
+      <header className="relative pt-12 pb-16 px-4 text-center overflow-hidden">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full max-w-4xl bg-emerald-500/5 blur-[120px] rounded-full -z-10"></div>
+        
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-900/30 border border-emerald-500/30 text-emerald-400 text-xs font-mono mb-6">
+          <Terminal size={12} />
+          <span>PATCH v0.1 LOADED</span>
+        </div>
+
+        <h1 className="text-4xl md:text-6xl font-black text-white mb-2 tracking-tighter">
+          GUILD WARS
+        </h1>
+        <p className="text-xl md:text-2xl text-emerald-500 font-mono mb-8">SEASON: BETA TEST</p>
+        
+        <div className="flex justify-center gap-4 mb-8">
+          <StatBadge value="21" label="Días" />
+          <StatBadge value="v0.1" label="Versión" />
+          <StatBadge value="Hard" label="Dificultad" color="red" />
+        </div>
+
+        <div className="max-w-2xl mx-auto bg-slate-900/50 p-6 rounded-xl border-l-4 border-emerald-500 text-left">
+          <p className="text-slate-300 mb-4">
+            <strong className="text-white">📜 INTRODUCCIÓN:</strong> El gremio ha detectado bloatware en los avatares físicos. Stats de resistencia nerfeados.
+          </p>
+          <p className="text-slate-300">
+            Se convoca una <span className="text-emerald-400 font-bold">RAID obligatoria de 21 días</span>. No buscamos al más flaco, buscamos al jugador más balanceado y capaz de optimizar su hardware.
+          </p>
+        </div>
+      </header>
+
+      <main className="max-w-3xl mx-auto px-4 space-y-16">
+
+        {/* Chapter 1: Economics */}
+        <section>
+          <SectionTitle icon={Coins} title="Cap. 1: El Contrato" subtitle="Economía y Loot Boxes" />
+          
+          <div className="grid md:grid-cols-2 gap-4 mb-6">
+            <Card className="bg-gradient-to-br from-slate-900 to-emerald-900/20">
+              <h3 className="text-emerald-400 font-bold mb-2 flex items-center gap-2">
+                <Trophy size={18} /> Loot Box (Bote Común)
+              </h3>
+              <ul className="text-sm space-y-2 text-slate-300">
+                <li>• <strong>Buy-in:</strong> $[MONTO] USD por jugador.</li>
+                <li>• <strong>Winner Takes All:</strong> El ganador se lleva el 100% del cofre acumulado.</li>
+              </ul>
+            </Card>
+
+            <Card className="bg-gradient-to-br from-slate-900 to-red-900/20 border-red-900/50">
+               <div className="absolute top-0 right-0 w-2 h-2 border-t-2 border-r-2 border-red-500"></div>
+               <div className="absolute bottom-0 left-0 w-2 h-2 border-b-2 border-l-2 border-red-500"></div>
+              <h3 className="text-red-400 font-bold mb-2 flex items-center gap-2">
+                <Zap size={18} /> Penalizaciones (Nerfeos)
+              </h3>
+              <ul className="text-sm space-y-2 text-slate-300">
+                <li>• <strong>Multa por Regresión:</strong> Si engordas, pagas otra entrada al bote.</li>
+                <li>• <strong>Last Place:</strong> (A Votación) El último lugar paga multa.</li>
+              </ul>
+            </Card>
+          </div>
+
+          <div className="bg-indigo-900/20 border border-indigo-500/30 p-4 rounded-lg flex gap-3 items-start">
+            <Shield className="text-indigo-400 shrink-0 mt-1" size={20} />
+            <div>
+              <h4 className="text-indigo-300 font-bold text-sm uppercase mb-1">Escudo Anti-Doble Cobro</h4>
+              <p className="text-indigo-200/70 text-xs leading-relaxed">
+                "Ningún jugador podrá ser looteado más de una vez por temporada." Si subes de peso Y quedas último, solo pagas una multa.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* Chapter 2: Scoring */}
+        <section>
+          <SectionTitle icon={Activity} title="Cap. 2: Algoritmo" subtitle="Sistema de Puntuación Ponderado" />
+          
+          <div className="space-y-4">
+            {/* Priority High */}
+            <div className="relative">
+              <div className="flex items-center justify-between mb-1">
+                <span className="text-amber-400 font-bold text-sm flex items-center gap-2"><Sword size={14}/> RETO FÍSICO (Tú vs Tú)</span>
+                <span className="font-mono text-amber-400">40%</span>
+              </div>
+              <div className="h-2 bg-slate-800 rounded-full overflow-hidden">
+                <div className="h-full bg-amber-500 w-[40%]"></div>
+              </div>
+              <p className="text-xs text-slate-400 mt-1">
+                Se mide el % de mejora personal. Pasar de 10 a 20 repeticiones vale más que de 100 a 110.
+              </p>
+            </div>
+
+            {/* Priority Mid */}
+            <div className="relative">
+              <div className="flex items-center justify-between mb-1">
+                <span className="text-blue-400 font-bold text-sm flex items-center gap-2"><CheckSquare size={14}/> GRINDEO DIARIO</span>
+                <span className="font-mono text-blue-400">35%</span>
+              </div>
+              <div className="h-2 bg-slate-800 rounded-full overflow-hidden">
+                <div className="h-full bg-blue-500 w-[35%]"></div>
+              </div>
+              <p className="text-xs text-slate-400 mt-1">
+                Constancia pura. Reportar hábitos en Telegram antes de medianoche.
+              </p>
+            </div>
+
+            {/* Priority Low */}
+            <div className="relative">
+              <div className="flex items-center justify-between mb-1">
+                <span className="text-purple-400 font-bold text-sm flex items-center gap-2"><Scale size={14}/> PESO CORPORAL</span>
+                <span className="font-mono text-purple-400">25%</span>
+              </div>
+              <div className="h-2 bg-slate-800 rounded-full overflow-hidden">
+                <div className="h-full bg-purple-500 w-[25%]"></div>
+              </div>
+              <p className="text-xs text-slate-400 mt-1">
+                Porcentaje de peso perdido en báscula. Importa, pero no es lo único.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* Chapter 3: Missions */}
+        <section>
+          <SectionTitle icon={Camera} title="Cap. 3: Misiones Diarias" subtitle="Fermeo de XP" />
+          
+          <div className="bg-slate-900 border border-slate-800 p-4 rounded mb-6 text-center">
+             <p className="text-red-400 font-mono text-sm uppercase font-bold">⚠️ REGLA DE ORO</p>
+             <p className="text-slate-400 text-sm">"Pics or it didn't happen". Sin evidencia visual, no hay puntos.</p>
+          </div>
+
+          <div className="grid grid-cols-1 gap-4">
+            <div className="flex items-center gap-4 bg-slate-800 p-4 rounded-lg border-l-4 border-orange-500">
+              <div className="bg-orange-900/50 p-3 rounded-full text-orange-400">
+                <Flame size={24} />
+              </div>
+              <div>
+                <h3 className="font-bold text-white">Misión 1: #Sudor</h3>
+                <p className="text-xs text-slate-400">Foto sudando, Screenshot de Strava/Garmin, o reloj con calorías.</p>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-4 bg-slate-800 p-4 rounded-lg border-l-4 border-green-500">
+              <div className="bg-green-900/50 p-3 rounded-full text-green-400">
+                <Utensils size={24} />
+              </div>
+              <div>
+                <h3 className="font-bold text-white">Misión 2: #Sano</h3>
+                <p className="text-xs text-slate-400">Foto comida principal (Proteína + Vegetales). <span className="text-red-400">Prohibido azucar/fritos.</span></p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Special Section: The Gauntlet */}
+        <section>
+          <SectionTitle icon={Sword} title="The Gauntlet" subtitle="Las 3 Pruebas Físicas (40% Score)" />
+          
+          <ExerciseCard 
+            title="PRUEBA 1: La Silla Invisible"
+            sub="Wall Sit"
+            icon={Users}
+            desc="Espalda plana contra pared. Rodillas a 90°. Manos en el pecho. Gana quien aguante más tiempo antes de caer."
+            epicModes={[
+              { title: 'Modo Terremoto', desc: 'Los demás golpean la pared para desconcentrar.' },
+              { title: 'Carga de Datos', desc: 'Sostener una laptop vieja o tomos de manga sobre las piernas.' }
+            ]}
+          />
+
+          <ExerciseCard 
+            title="PRUEBA 2: El Camarero de Acero"
+            sub="Iron Waiter"
+            icon={Scale}
+            desc="Brazos en cruz (T) sosteniendo pesos ligeros idénticos. Se mide el tiempo hasta que los brazos bajen de la horizontal."
+            epicModes={[
+              { title: 'No derrames la poción', desc: 'Vasos llenos de agua al borde en lugar de pesas.' },
+              { title: 'Shonen Scream', desc: 'Obligatorio gritar cargando Ki; si te callas, pierdes.' }
+            ]}
+          />
+
+          <ExerciseCard 
+            title="PRUEBA 3: El Escalador"
+            sub="Mountain Climbers"
+            icon={Activity}
+            desc="Plancha alta. Rodillas al pecho alternadas. Máximas reps en 60 segundos."
+            epicModes={[
+              { title: 'Boss Music', desc: 'Hacerlo al ritmo de Speed Metal u Opening de Anime.' },
+              { title: 'Público Hostil', desc: 'Jugadores gritan números al azar para confundir el conteo.' }
+            ]}
+          />
+        </section>
+
+        {/* Chapter 4: The Boss */}
+        <section>
+          <SectionTitle icon={Users} title="Cap. 4: Boss Final" subtitle="Reunión Presencial" />
+          <Card className="text-center">
+            <h3 className="text-xl font-bold text-white mb-4">EL DÍA DEL JUICIO</h3>
+            <p className="text-slate-300 text-sm mb-6">
+              Al finalizar los 21 días, el gremio se reunirá para el pesaje final, los retos físicos y el "Cheat Meal" de victoria.
+            </p>
+            
+            <div className="grid grid-cols-3 gap-2 text-xs font-mono">
+              <div className="bg-slate-800 p-2 rounded border border-slate-700">
+                <span className="block text-emerald-400 font-bold">JUEZ</span>
+                <span className="text-slate-500">Controla la báscula</span>
+              </div>
+              <div className="bg-slate-800 p-2 rounded border border-slate-700">
+                <span className="block text-purple-400 font-bold">BARDO</span>
+                <span className="text-slate-500">Playlist Épica</span>
+              </div>
+              <div className="bg-slate-800 p-2 rounded border border-slate-700">
+                <span className="block text-blue-400 font-bold">CÁMARA</span>
+                <span className="text-slate-500">Graba el dolor</span>
+              </div>
+            </div>
+          </Card>
+        </section>
+
+        {/* Checklist */}
+        <section className="pb-10">
+          <SectionTitle icon={CheckSquare} title="Checklist Pre-Lanzamiento" />
+          <div className="bg-slate-900/50 rounded-lg border border-slate-800 p-4 space-y-3">
+            <label className="flex items-center gap-3 cursor-pointer group">
+              <div className={`w-5 h-5 rounded border flex items-center justify-center transition-colors ${checkedItems.buyin ? 'bg-emerald-500 border-emerald-500' : 'border-slate-600 group-hover:border-emerald-500'}`}>
+                {checkedItems.buyin && <CheckSquare size={14} className="text-slate-900" />}
+              </div>
+              <input type="checkbox" className="hidden" checked={checkedItems.buyin} onChange={() => toggleCheck('buyin')} />
+              <span className={`text-sm ${checkedItems.buyin ? 'text-emerald-400 line-through' : 'text-slate-300'}`}>Definir monto exacto del Buy-in ($)</span>
+            </label>
+
+            <label className="flex items-center gap-3 cursor-pointer group">
+              <div className={`w-5 h-5 rounded border flex items-center justify-center transition-colors ${checkedItems.vote ? 'bg-emerald-500 border-emerald-500' : 'border-slate-600 group-hover:border-emerald-500'}`}>
+                {checkedItems.vote && <CheckSquare size={14} className="text-slate-900" />}
+              </div>
+              <input type="checkbox" className="hidden" checked={checkedItems.vote} onChange={() => toggleCheck('vote')} />
+              <span className={`text-sm ${checkedItems.vote ? 'text-emerald-400 line-through' : 'text-slate-300'}`}>Votar penalización "Último Lugar"</span>
+            </label>
+
+            <label className="flex items-center gap-3 cursor-pointer group">
+              <div className={`w-5 h-5 rounded border flex items-center justify-center transition-colors ${checkedItems.dates ? 'bg-emerald-500 border-emerald-500' : 'border-slate-600 group-hover:border-emerald-500'}`}>
+                {checkedItems.dates && <CheckSquare size={14} className="text-slate-900" />}
+              </div>
+              <input type="checkbox" className="hidden" checked={checkedItems.dates} onChange={() => toggleCheck('dates')} />
+              <span className={`text-sm ${checkedItems.dates ? 'text-emerald-400 line-through' : 'text-slate-300'}`}>Fijar Fecha Inicio y Fecha Juicio</span>
+            </label>
+
+            <label className="flex items-center gap-3 cursor-pointer group">
+              <div className={`w-5 h-5 rounded border flex items-center justify-center transition-colors ${checkedItems.paid ? 'bg-emerald-500 border-emerald-500' : 'border-slate-600 group-hover:border-emerald-500'}`}>
+                {checkedItems.paid && <CheckSquare size={14} className="text-slate-900" />}
+              </div>
+              <input type="checkbox" className="hidden" checked={checkedItems.paid} onChange={() => toggleCheck('paid')} />
+              <span className={`text-sm ${checkedItems.paid ? 'text-emerald-400 line-through' : 'text-slate-300'}`}>Todos han pagado al tesorero</span>
+            </label>
+          </div>
+        </section>
+
+      </main>
+
+      {/* Footer */}
+      <footer className="text-center py-12 px-4 border-t border-slate-800 mt-8">
+        <p className="font-mono text-emerald-500 italic mb-2">"Que el código de vuestros cuerpos compile sin errores."</p>
+        <p className="text-slate-600 text-xs uppercase tracking-widest">— La Administración</p>
+      </footer>
+
+    </div>
+  );
+}
+
